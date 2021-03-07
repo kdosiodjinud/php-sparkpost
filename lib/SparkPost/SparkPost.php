@@ -135,6 +135,13 @@ class SparkPost
     {
         if ($this->httpClient instanceof HttpAsyncClient) {
             $requestValues = $this->buildRequestValues($method, $uri, $payload, $headers);
+            
+            // --- FIX FOR PHP8 ----
+            $requestValues['uri'] = $requestValues['url'];
+            unset($requestValues['url']);
+            // ---------------------
+            
+            
             $request = call_user_func_array(array($this, 'buildRequestInstance'), $requestValues);
 
             $retries = $this->options['retries'];
